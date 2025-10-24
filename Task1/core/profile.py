@@ -25,4 +25,4 @@ class Profile:
         return pnl
 
     def roi(self):
-        return ((self.cash - self.budget) / self.budget) * 100
+        return ((self.cash - self.budget) / self.budget) * 100, self.cash

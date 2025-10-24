@@ -32,14 +32,20 @@ class MovingAverageStrategy:
 
             elif int(row['Position_move']) == -2 and profile.shares !=0:
                 pnl =float(profile.sell(row['Close']))
-                print(f"Trade pnl: {pnl}({float(profile.roi()):.2f}%)")
+                print(f"Trade pnl: {pnl}({float(profile.roi()[0]):.2f}%)")
 
         if profile.shares > 0:
             row = df.iloc[-1]
             print(f"Forcefully closed")
             pnl = float(profile.sell(row['Close']))
+        print("Profile update")
+        print(f"Main budget was: {self.budget}")
+        print(f"Final balance is: {float((profile.roi())[1]):.2f}")
+        print(f"Total profit/loss:{float(((profile.roi())[1]) - self.budget):.2f}")
+        print(f"Final ROI: {float(profile.roi()[0]):.2f}%")
 
-        print(f"Final ROI: {float(profile.roi()):.2f}%")
+
+
 
 
 
