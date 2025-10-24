@@ -1,0 +1,31 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from Task2.api.ask_routes import router as ask_router
+from .datascraper import DatabaseExecution, DB_CONFIG, main
+
+app = FastAPI(title="Scraper + RAG API")
+db = DatabaseExecution(DB_CONFIG)
+@app.on_event("startup")
+def startup_event():
+    """Check table, run scraper if table missing"""
+    if not db.table_exists() or db.is_table_empty():
+        print("Phones table not found. Running scraper...")
+        main()
+    else:
+        print("Phones table exists. Skipping scraper.")
+# Allow frontend access
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # you can restrict later for security
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def root():
+    return {"message": "Welcome to the Scraper + RAG API"}
+
+# Register /ask route
+app.include_router(ask_router, prefix="/ask", tags=["Ask"])
+
