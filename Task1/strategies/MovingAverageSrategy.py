@@ -1,3 +1,7 @@
+"""
+This is for running the strategy using the given parameters
+"""
+
 from Task1.core.data_fetcher import FetchData
 from Task1.core.indicator import Indicator
 from Task1.core.GoldenOpportunity import GoldenOpportunityGenerator

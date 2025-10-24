@@ -1,3 +1,6 @@
+"""
+This is for maintaining the profile after given budget . This also handles buy or sell according to provided info
+"""
 class Profile:
     def __init__(self, budget):
         self.budget = float(budget)

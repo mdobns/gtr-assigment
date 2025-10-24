@@ -1,7 +1,12 @@
+"""
+This gets the provided share data
+"""
 import yfinance as yf
-import pandas as pd
 
 class FetchData:
+    """
+    It gets the data, clean the data then return it
+    """
     def __init__(self, symbol, start, end):
         self.symbol =symbol
         self.start_date = start

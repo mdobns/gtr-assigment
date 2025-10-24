@@ -1,0 +1,1 @@
+from Task1.strategies.MovingAverageSrategy import MovingAverageStrategy
