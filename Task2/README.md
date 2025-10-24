@@ -34,6 +34,7 @@ uvicorn Task2.main:app --reload
 ### What This Does
 
 1. Starts the FastAPI server on `http://localhost:8000`
+   2. It will check for the database , if the table does not exist or table is empty it first get the data from `Gsmarena.com` and then start the server.
 2. Enables hot-reloading (`--reload` flag) for development
 
 ### Access Points
