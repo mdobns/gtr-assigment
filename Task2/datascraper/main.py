@@ -18,6 +18,7 @@ def main():
         samsung_url = "https://www.gsmarena.com/samsung-phones-f-9-0-r1-p1.php"
         
         all_phones_data = scraper.get_phones_spec(samsung_url, limit=20)
+
         if all_phones_data:
             scraped_count = len(all_phones_data)
             print(f"Data fetched: {scraped_count} phones. Saving to database...")
@@ -25,6 +26,22 @@ def main():
             return True
         else:
             print("No data was scraped")
+            return False
+
+    except RateLimitError as e:
+        print(f"Rate limit detected.")
+        if all_phones_data and db_repo:
+            scraped_count = len(all_phones_data)
+            print(f"Saving {scraped_count} fetched records before exit...")
+            try:
+                db_repo.insert_data(all_phones_data)
+                print(f"Successfully saved {scraped_count} records")
+                return True
+            except Exception as db_error:
+                print(f"Error saving data: {db_error}")
+                return False
+        else:
+            print("No data fetched before rate limit")
             return False
 
     except Exception as e:

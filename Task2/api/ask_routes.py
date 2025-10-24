@@ -13,7 +13,7 @@ class QuestionInput(BaseModel):
     question: str
     
 
-@router.post("/")  # Changed to /ask to match requirements
+@router.post("/ask")  # Changed to /ask to match requirements
 async def ask_question(payload: QuestionInput):
     try:
         question = payload.question

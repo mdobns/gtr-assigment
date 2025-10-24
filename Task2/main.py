@@ -34,5 +34,5 @@ def root():
     return {"message": "Welcome to the Scraper + RAG API"}
 
 # Register /ask route
-app.include_router(ask_router, prefix="/ask", tags=["Ask"])
+app.include_router(ask_router, prefix="", tags=["Ask"])
 
