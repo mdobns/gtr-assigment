@@ -11,7 +11,6 @@ class FetchData:
         print(f"Started downloading data for {self.symbol}")
         df = yf.download(self.symbol , self.start_date , self.end_date,auto_adjust=False)
 
-
         df.reset_index(inplace=True)  #
         df.drop_duplicates(inplace=True)
         df.ffill(inplace=True)

@@ -1,6 +1,10 @@
 from bs4 import BeautifulSoup
 import requests, time, re
 
+class RateLimitError(Exception):
+    """Custom exception for rate limit detection"""
+    pass
+
 class PhoneDataCrawler:
     def __init__(self, html_page):
         self.soup = BeautifulSoup(html_page, 'html.parser')
@@ -45,30 +49,34 @@ class MainScraper:
         self.headers = headers
 
     def fetch_html(self, url, max_retries=3, delay=2):
+        last_error = None
         for attempt in range(max_retries):
             try:
                 response = requests.get(url, headers=self.headers, timeout=10)
                 if response.status_code == 200:
                     return response.text
-                elif response.status_code == 429:  # Too Many Requests
-                    print(f"Rate limited on attempt {attempt + 1}. Waiting {delay * (attempt + 1)} seconds...")
-                    time.sleep(delay * (attempt + 1))
-                    continue
+                elif response.status_code == 429:  # Too Many Requests - Rate Limited
+                    raise RateLimitError("Rate limit detected - stopping scraper")
                 else:
                     print(f"Error getting data from {url}, Error code {response.status_code}")
                     time.sleep(delay)
+            except RateLimitError:
+                raise
             except (requests.ConnectionError, requests.Timeout) as e:
                 print(f"Connection error on attempt {attempt + 1}: {str(e)}")
+                last_error = e
                 if attempt < max_retries - 1:
                     time.sleep(delay * (attempt + 1))
                     continue
-                raise
+                # Don't raise connection errors, just return None
+                return None
             except Exception as e:
                 print(f"Unexpected error on attempt {attempt + 1}: {str(e)}")
+                last_error = e
                 if attempt < max_retries - 1:
                     time.sleep(delay * (attempt + 1))
                     continue
-                raise
+                return None
         return None
 
     def get_phones_urls(self, list_page_url):
@@ -116,9 +124,11 @@ class MainScraper:
                 all_phones_data.append(phone_data)
                 
                 # Add a small delay between requests to be polite
-                # Don't sleep after the last request
                 time.sleep(1)
                     
+            except RateLimitError as e:
+                print(f"Rate limit hit at phone {i}. Stopping scraper but keeping scraped data.")
+                break
             except Exception as e:
                 print(f"Error processing phone {url}: {str(e)}")
                 continue
