@@ -1,3 +1,7 @@
+"""
+This is for inserting fetched data to the database
+"""
+
 import psycopg2
 
 

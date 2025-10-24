@@ -1,12 +1,14 @@
+"""
+This is to identify get the asked data of asked phone from the database
+"""
+
 import  psycopg2
 import re
-import json
 from .generative_rag import gen_ans, Rag2Input
 class PhoneRAGAgent:
     def __init__(self, db_config):
         self.conn = psycopg2.connect(**db_config)
         self.cur = self.conn.cursor()
-        print("RAG Agent connected to PostgreSQL.")
 
     def _extract_models(self, question):
         """Extract specific model names from the question."""
@@ -94,19 +96,16 @@ class PhoneRAGAgent:
 
     def answer_question(self, question):
         try:
-            # 1. Extract models and budget
+
             models = self._extract_models(question)
             budget = self._extract_budget(question)
 
-            # 2. Build and execute query
             query, params = self._build_query(models=models, budget=budget)
             self.cur.execute(query, params)
 
-            # 3. Fetch results
             columns = [desc[0] for desc in self.cur.description]
             results = self.cur.fetchall()
 
-            # 4. Format response
             response = self._format_response(results, columns)
             print(len(response))
             if results != []:

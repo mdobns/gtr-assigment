@@ -1,4 +1,6 @@
-
+"""
+Here I use gemini's fastest model for better natural answer with provided context
+"""
 from pydantic import BaseModel
 import google.generativeai as genai
 

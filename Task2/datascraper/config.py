@@ -1,13 +1,14 @@
-'''
-Update these all using your own credentials
-'''
+"""
+Update these all using your own credentials.
+This is important to get database connection.
+"""
 
 DB_CONFIG = {
     "host": "localhost",
     "database": "postgres",
     "user": "postgres",
     "password": "root",
-    "port": 5432  # Changed to integer
+    "port": 5432
 }
 
 HEADERS = {

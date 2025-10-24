@@ -6,6 +6,9 @@ class RateLimitError(Exception):
     pass
 
 class PhoneDataCrawler:
+    """
+    This is for getting data for popular smartphones and their specs
+    """
     def __init__(self, html_page):
         self.soup = BeautifulSoup(html_page, 'html.parser')
 
@@ -55,7 +58,7 @@ class MainScraper:
                 response = requests.get(url, headers=self.headers, timeout=10)
                 if response.status_code == 200:
                     return response.text
-                elif response.status_code == 429:  # Too Many Requests - Rate Limited
+                elif response.status_code == 429:
                     raise RateLimitError("Rate limit detected - stopping scraper")
                 else:
                     print(f"Error getting data from {url}, Error code {response.status_code}")
@@ -122,8 +125,8 @@ class MainScraper:
                 crawl_data = PhoneDataCrawler(phone_page)
                 phone_data = crawl_data.spec_scraper()
                 all_phones_data.append(phone_data)
-                
-                # Add a small delay between requests to be polite
+
+                #This helps to get rid of too many attemps from gsmarena
                 time.sleep(1)
                     
             except RateLimitError as e:

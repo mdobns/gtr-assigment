@@ -5,7 +5,7 @@ from .gsmarena_crawler import MainScraper, RateLimitError
 def main():
     """
     Scrape phone data and save to database.
-    Returns True if any data was successfully saved, False if completely empty.
+    Returns True if data successfully saved, False if completely empty.
     """
     db_repo = None
     all_phones_data = []
